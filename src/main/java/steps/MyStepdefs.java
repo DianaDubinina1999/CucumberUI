@@ -2,26 +2,54 @@ package steps;
 
 import io.cucumber.java.BeforeAll;
 import io.cucumber.java.ru. * ;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.util.concurrent.TimeUnit;
+import utils.PropConst;
 
 public class MyStepdefs {
      private static WebDriver driver;
+    static PropConst prop = new PropConst ();
+
 
 
     @BeforeAll
     public static void MyStepdefs () {
-        System.setProperty ("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
-        driver = new ChromeDriver ();
-        driver.manage ().timeouts ().implicitlyWait (10, TimeUnit.SECONDS);
-        driver.manage ().window ().maximize ();
-        driver.get ("http://localhost:8080");
-        driver.findElement(By.id("navbarDropdown")).click();
-        driver.findElement(By.linkText("Товары")).click();
 
+        //PropConst prop = new PropConst ();
+        if ("remote".equalsIgnoreCase (prop.getProperty("type.driver"))) {
+            initRemoteDriver ();
+        } else {
+
+            System.setProperty ("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
+            driver = new ChromeDriver ();
+            driver.manage ().timeouts ().implicitlyWait (10, TimeUnit.SECONDS);
+            driver.manage ().window ().maximize ();
+            driver.get ("http://localhost:8080");
+            driver.findElement (By.id ("navbarDropdown")).click ();
+            driver.findElement (By.linkText ("Товары")).click ();
+
+        }
+    }
+
+    private static void initRemoteDriver () {
+        DesiredCapabilities capabilities = new DesiredCapabilities ();
+        capabilities.setBrowserName (prop.getProperty ("type.browser"));
+        capabilities.setVersion ("109.0");
+        capabilities.setCapability ("enableVNC", true);
+        try { driver = new RemoteWebDriver
+                (URI.create (prop.getProperty ("selenoid.url")).toURL (), capabilities);
+    } catch (MalformedURLException e) {
+            throw new RuntimeException (e);
+        }
     }
 
     @Когда("открываем сайт {string}")
