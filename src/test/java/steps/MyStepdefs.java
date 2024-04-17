@@ -18,7 +18,7 @@ public class MyStepdefs {
         driver = new ChromeDriver ();
         driver.manage ().timeouts ().implicitlyWait (10, TimeUnit.SECONDS);
         driver.manage ().window ().maximize ();
-        driver.get ("http://localhost:8080");
+        driver.get ("http://149.154.71.152:8080/");
         driver.findElement(By.id("navbarDropdown")).click();
         driver.findElement(By.linkText("Товары")).click();
 
