@@ -6,23 +6,46 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.URI;
+import java.net.URL;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class MyStepdefs {
-     private static WebDriver driver;
+    private static WebDriver driver;
 
 
     @BeforeAll
-    public static void MyStepdefs () {
-        System.setProperty ("webdriver.chrome.driver", "src/test/resources/chromedriver");
-        driver = new ChromeDriver ();
+    public static void MyStepdefs () throws Exception {
+        System.setProperty("REMOTE", "true");
+        if (Boolean.parseBoolean (System.getProperty ("REMOTE"))) {
+            DesiredCapabilities capabilities = new DesiredCapabilities ();
+            capabilities.setCapability ("browserName", "chrome");
+            capabilities.setCapability ("browserVersion", "109.0");
+            capabilities.setCapability ("selenoid:options", Map.<String, Object>of (
+                    "enableVNC", true,
+                    "enableVideo", false
+            ));
+            driver = new RemoteWebDriver(
+                    new URL ("http://149.154.71.152:4444/wd/hub"),
+                    capabilities
+
+            );
+        } else {
+            System.setProperty ("webdriver.chrome.driver", "src/test/resources/chromedriver.exe");
+            driver = new ChromeDriver ();
+
+        }
         driver.manage ().timeouts ().implicitlyWait (10, TimeUnit.SECONDS);
         driver.manage ().window ().maximize ();
         driver.get ("http://149.154.71.152:8080/");
-        driver.findElement(By.id("navbarDropdown")).click();
-        driver.findElement(By.linkText("Товары")).click();
 
     }
+
 
     @Когда("открываем сайт {string}")
     public void открываем_сайт (String string) {
@@ -30,12 +53,12 @@ public class MyStepdefs {
 
     @Тогда("нажимаем кнопку {string}")
     public void нажимаем_кнопку(String string) {
-        //driver.findElement(By.id("navbarDropdown")).click();
+        driver.findElement(By.id("navbarDropdown")).click();
     }
 
     @И("выбираем {string}")
     public void выбираем (String arg0) {
-        //driver.findElement(By.linkText(arg0)).click();
+        driver.findElement(By.linkText(arg0)).click();
     }
 
     @Дано("нажимаем {string}")
