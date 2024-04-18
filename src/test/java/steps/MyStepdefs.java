@@ -28,10 +28,10 @@ public class MyStepdefs {
             DesiredCapabilities capabilities = new DesiredCapabilities();
             if (browser != null && browser.equalsIgnoreCase("firefox")) {
                 capabilities.setCapability("browserName", "firefox");
-                capabilities.setCapability("browserVersion", browserVersion);
+                capabilities.setCapability("browserVersion",109.0);
             } else {
                 capabilities.setCapability("browserName", "chrome");
-                capabilities.setCapability("browserVersion", browserVersion);
+                capabilities.setCapability("browserVersion",109.0);
             }
 
             capabilities.setCapability ("selenoid:options", Map.<String, Object>of (
