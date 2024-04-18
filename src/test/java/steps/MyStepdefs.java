@@ -20,12 +20,20 @@ public class MyStepdefs {
 
 
     @BeforeAll
-    public static void MyStepdefs () throws Exception {
-        System.setProperty("REMOTE", "true");
-        if (Boolean.parseBoolean (System.getProperty ("REMOTE"))) {
-            DesiredCapabilities capabilities = new DesiredCapabilities ();
-            capabilities.setCapability ("browserName", "chrome");
-            capabilities.setCapability ("browserVersion", "109.0");
+     public static void MyStepdefs () throws Exception {
+        //System.setProperty("REMOTE", "true");
+        String browser = System.getProperty("BROWSER");
+        String browserVersion = System.getProperty("BROWSER_VERSION");
+        if (Boolean.parseBoolean(System.getProperty("REMOTE"))) {
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            if (browser != null && browser.equalsIgnoreCase("firefox")) {
+                capabilities.setCapability("browserName", "firefox");
+                capabilities.setCapability("browserVersion", browserVersion);
+            } else {
+                capabilities.setCapability("browserName", "chrome");
+                capabilities.setCapability("browserVersion", browserVersion);
+            }
+
             capabilities.setCapability ("selenoid:options", Map.<String, Object>of (
                     "enableVNC", true,
                     "enableVideo", false
@@ -33,6 +41,7 @@ public class MyStepdefs {
             driver = new RemoteWebDriver(
                     new URL ("http://149.154.71.152:4444/wd/hub"),
                     capabilities
+
 
             );
         } else {
