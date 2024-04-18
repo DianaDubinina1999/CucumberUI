@@ -21,7 +21,7 @@ public class MyStepdefs {
 
     @BeforeAll
      public static void MyStepdefs () throws Exception {
-        //System.setProperty("REMOTE", "true");
+        System.setProperty("REMOTE", "true");
         String browser = System.getProperty("BROWSER");
         String browserVersion = System.getProperty("BROWSER_VERSION");
         if (Boolean.parseBoolean(System.getProperty("REMOTE"))) {
