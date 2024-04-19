@@ -21,11 +21,12 @@ public class MyStepdefs {
 
     @BeforeAll
      public static void MyStepdefs () throws Exception {
-      System.getProperty ("Remote");
+      System.setProperty ("REMOTE", "true");
+
         String browser = System.getProperty ("type.browser");
         String browserVersion = System.getProperty ("version.browser");
 
-        if (Boolean.parseBoolean (System.getProperty ("Remote"))) {
+        if (Boolean.parseBoolean (System.getProperty ("REMOTE"))) {
                 DesiredCapabilities capabilities = new DesiredCapabilities ();
                 capabilities.setCapability ("browserName", browser);
                 capabilities.setCapability ("browserVersion", browserVersion);
